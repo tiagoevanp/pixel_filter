@@ -4,7 +4,7 @@ window.onload = () => {
 
 const doAll = () => {
 	const image = createImage();
-	const pixelSize = 5;
+	const pixelSize = 10;
 	image.onload = () => {
 		const canvasOriginalImageContext = createCanvas(image);
 		const canvasFilterImageContext = createCanvas(image);
@@ -26,7 +26,7 @@ const createCanvas = image => {
 
 const createImage = () => {
 	const image = new Image();
-	image.src = 'dog.jpg';
+	image.src = 'teleguiada.jpeg';
 	return image;
 }
 
