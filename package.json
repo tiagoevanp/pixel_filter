@@ -1,0 +1,21 @@
+{
+  "type": "module",
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack-dev-server --port 3000 --mode development"
+  },
+  "dependencies": {
+    "materialize-css": "1.0.0-rc.2",
+    "webpack-dev-server": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/materialize-css": "^1.0.14",
+    "css-loader": "^7.1.2",
+    "html-webpack-plugin": "^5.6.4",
+    "style-loader": "^4.0.0",
+    "ts-loader": "^9.5.4",
+    "typescript": "^5.9.2",
+    "webpack": "^5.101.3",
+    "webpack-cli": "^6.0.1"
+  }
+}
