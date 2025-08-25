@@ -12,6 +12,7 @@ const clickButtonFilter = () => {
 	const pixelSize = inputValue*1;
 	
 	image.onload = () => {
+		image
 		const canvasOriginalImageContext = document.getElementById('canvasO').getContext("2d");
 		const canvasFilterImageContext = document.getElementById('canvasF').getContext("2d");
 		drawImageFilterOnCanvas(canvasOriginalImageContext, canvasFilterImageContext, image, pixelSize);
@@ -22,6 +23,7 @@ const doAll = () => {
 	const image = createImage();
 	const pixelSize = 10;
 	image.onload = () => {
+		image
 		const canvasOriginalImageContext = createCanvas(image, 'canvasO');
 		const canvasFilterImageContext = createCanvas(image, 'canvasF');
 		drawImageOnCanvas(canvasOriginalImageContext, image);
@@ -32,8 +34,8 @@ const doAll = () => {
 const createCanvas = (image, id) => {
 	const root = document.getElementById('root');
 	const canvas = document.createElement('canvas');
-	canvas.setAttribute('width', image.width);
-	canvas.setAttribute('height', image.height);
+	canvas.setAttribute('width', 400);
+	canvas.setAttribute('height', 400);
 	canvas.setAttribute('style', 'margin: 10px');
 	canvas.setAttribute('id', id);
 	root.appendChild(canvas);
@@ -43,17 +45,17 @@ const createCanvas = (image, id) => {
 
 const createImage = () => {
 	const image = new Image();
-	image.src = 'images/teleguiada.jpeg';
+	image.src = 'images/boat.jpg';
 	return image;
 }
 
 const drawImageOnCanvas = (canvas, image) => {
-	canvas.drawImage(image, 0, 0);
+	canvas.drawImage(image, 0, 0, 400, 400);
 }
 
 const drawImageFilterOnCanvas = (canvasO, canvasF, image, size) => {
-	for(var j = 0; j < image.height; j += size) {
-		for(let i = 0; i < image.width; i += size) {
+	for(var j = 0; j < 400; j += size) {
+		for(let i = 0; i < 400; i += size) {
 			imgData = makeNewData(canvasO, i, j, size);
 			canvasF.putImageData(imgData, i, j);
 		}
