@@ -4,11 +4,12 @@ window.onload = () => {
 
 const doAll = () => {
 	const image = createImage();
+	const pixelSize = 5;
 	image.onload = () => {
 		const canvasOriginalImageContext = createCanvas(image);
 		const canvasFilterImageContext = createCanvas(image);
 		drawImageOnCanvas(canvasOriginalImageContext, image);
-		drawImageFilterOnCanvas(canvasOriginalImageContext, canvasFilterImageContext, image);
+		drawImageFilterOnCanvas(canvasOriginalImageContext, canvasFilterImageContext, image, pixelSize);
 	}
 }
 
@@ -33,17 +34,17 @@ const drawImageOnCanvas = (canvas, image) => {
 	canvas.drawImage(image, 0, 0);
 }
 
-const drawImageFilterOnCanvas = (canvasO, canvasF, image) => {
-	for(var j = 0; j < image.height; j += 5) {
-		for(let i = 0; i < image.width; i += 5) {
-			imgData = makeNewData(canvasO, i, j);
+const drawImageFilterOnCanvas = (canvasO, canvasF, image, size) => {
+	for(var j = 0; j < image.height; j += size) {
+		for(let i = 0; i < image.width; i += size) {
+			imgData = makeNewData(canvasO, i, j, size);
 			canvasF.putImageData(imgData, i, j);
 		}
 	}
 }
 
-const makeNewData = (c, i, j) => {
-	const imgData = c.getImageData(i, j, 5, 5);
+const makeNewData = (c, i, j, s) => {
+	const imgData = c.getImageData(i, j, s, s);
 	const pixelsData = [];
 	const hexadecimals = [];
 	
@@ -51,12 +52,7 @@ const makeNewData = (c, i, j) => {
 		pixelsData.push(imgData.data.slice(l, l+4));
 	}
 	
-	pixelsData.map((el, idx) => {
-		hexadecimals.push(fullColorHex(el[0], el[1], el[2]));
-	});
-	
-	const hexMostFrequent = mostFrequent(hexadecimals);
-	const rgb = hexToRgb(hexMostFrequent);
+	const av = averageRGB(pixelsData, Math.pow(s, 2));
 
 	let red = true;
 	let green = true;
@@ -65,13 +61,13 @@ const makeNewData = (c, i, j) => {
 	for(let m = 0; m < imgData.data.length; m++) {
 		if(red) {
 			red = false;
-			imgData.data[m] = rgb.r;
+			imgData.data[m] = av.r;
 		} else if(green) {
 			green = false;
-			imgData.data[m] = rgb.g;
+			imgData.data[m] = av.g;
 		} else if(blue) {
 			blue = false
-			imgData.data[m] = rgb.b;
+			imgData.data[m] = av.b;
 		} else {
 			red = true;
 			green = true;
@@ -82,54 +78,23 @@ const makeNewData = (c, i, j) => {
 	return imgData;
 }
 
-const fullColorHex = (r,g,b) => {   
-	const red = rgbToHex(r);
-	const green = rgbToHex(g);
-	const blue = rgbToHex(b);
-	return red+green+blue;
-}
-
-const rgbToHex = rgb => { 
-  let hex = Number(rgb).toString(16);
-  if (hex.length < 2) {
-		hex = "0" + hex;
-  }
-  return hex;
-}
-
-const hexToRgb = hex => {
-	var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
-	hex = hex.replace(shorthandRegex, function(m, r, g, b) {
-			return r + r + g + g + b + b;
-	});
-
-	var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-	return result ? {
-		r: parseInt(result[1], 16),
-		g: parseInt(result[2], 16),
-		b: parseInt(result[3], 16)
-	} : null;
-}
-
-const mostFrequent = hex => {
-	var counts = {};
-  var compare = 0;
-	var mostFrequent;
-	
-	for(let i = 0; i < hex.length; i++) {
-      var word = hex[i];
-   
-      if(counts[word] === undefined){
-         counts[word] = 1;
-      }else{
-         counts[word] = counts[word] + 1;
-      }
-      if(counts[word] > compare){
-         compare = counts[word];
-         mostFrequent = hex[i];
-      }
+const averageRGB = (data, squareSize) => {
+	const r = [];
+	const g = [];
+	const b = [];
+	const reducer = (accu, curr) => {
+		return accu + curr;
 	}
-	
-	return mostFrequent;
-}
 
+	data.map(el => {
+		r.push(el[0]);	 
+		g.push(el[1]);	 
+		b.push(el[2]);	 
+	})
+
+	const averageR = r.reduce(reducer)/squareSize;
+	const averageG = g.reduce(reducer)/squareSize;
+	const averageB = b.reduce(reducer)/squareSize;
+	
+	return {r: averageR, g: averageG, b: averageB};
+}
