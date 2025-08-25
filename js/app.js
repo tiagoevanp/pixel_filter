@@ -2,23 +2,40 @@ window.onload = () => {
 	doAll();
 }
 
+const clickButtonFilter = () => {
+	const inputValue = document.getElementById('qnt').value;
+	if(!inputValue) {
+		window.alert('You may inform the pixel size!')
+		return false;
+	}
+	const image = createImage();
+	const pixelSize = inputValue*1;
+	
+	image.onload = () => {
+		const canvasOriginalImageContext = document.getElementById('canvasO').getContext("2d");
+		const canvasFilterImageContext = document.getElementById('canvasF').getContext("2d");
+		drawImageFilterOnCanvas(canvasOriginalImageContext, canvasFilterImageContext, image, pixelSize);
+	}
+}
+
 const doAll = () => {
 	const image = createImage();
 	const pixelSize = 10;
 	image.onload = () => {
-		const canvasOriginalImageContext = createCanvas(image);
-		const canvasFilterImageContext = createCanvas(image);
+		const canvasOriginalImageContext = createCanvas(image, 'canvasO');
+		const canvasFilterImageContext = createCanvas(image, 'canvasF');
 		drawImageOnCanvas(canvasOriginalImageContext, image);
 		drawImageFilterOnCanvas(canvasOriginalImageContext, canvasFilterImageContext, image, pixelSize);
 	}
 }
 
-const createCanvas = image => {
+const createCanvas = (image, id) => {
 	const root = document.getElementById('root');
 	const canvas = document.createElement('canvas');
 	canvas.setAttribute('width', image.width);
 	canvas.setAttribute('height', image.height);
 	canvas.setAttribute('style', 'margin: 10px');
+	canvas.setAttribute('id', id);
 	root.appendChild(canvas);
 	
 	return canvas.getContext("2d");
@@ -26,7 +43,7 @@ const createCanvas = image => {
 
 const createImage = () => {
 	const image = new Image();
-	image.src = 'teleguiada.jpeg';
+	image.src = 'images/teleguiada.jpeg';
 	return image;
 }
 
