@@ -6,6 +6,9 @@ import { createListeners } from "./lib/createListeners";
 import { createComponents } from "./lib/createComponents";
 
 window.onload = () => {
+  localStorage.setItem("canvasWidth", "600");
+  localStorage.setItem("canvasHeight", "600");
+
   M.AutoInit();
   createComponents();
   createListeners();

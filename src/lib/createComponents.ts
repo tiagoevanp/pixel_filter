@@ -25,8 +25,8 @@ export const createComponents = () => {
 
   image.onload = () => {
     image;
-    const canvasOriginalImageContext = createCanvas("canvasO", 600);
-    const canvasFilterImageContext = createCanvas("canvasF", 600);
+    const canvasOriginalImageContext = createCanvas("canvasO");
+    const canvasFilterImageContext = createCanvas("canvasF");
     drawImageOnCanvas(canvasOriginalImageContext, image);
     drawImageFilteredOnCanvas(
       canvasOriginalImageContext,
